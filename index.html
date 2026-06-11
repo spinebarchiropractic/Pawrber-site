@@ -441,8 +441,16 @@
       <p class="hero-sub">Find verified groomers, trainers, and sitters across Los Angeles — all in one place, with real reviews from real owners.</p>
       <div class="search-wrap" id="hero-search-wrap">
         <div class="sf">
-          <div class="sf-lbl">Service or Provider</div>
-          <input class="sf-inp" id="h-svc" type="text" placeholder="Grooming, training, Happy Paws…" oninput="heroAutocomplete(this.value)" onkeydown="if(event.key==='Enter')heroSearch()" autocomplete="off"/>
+          <div class="sf-lbl">Service</div>
+          <select class="sf-inp" id="h-svc" onchange="heroSearch()" style="cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 4px center;padding-right:20px;">
+            <option value="">All Services</option>
+            <option value="grooming">🐾 Grooming</option>
+            <option value="mobile groomer">🚐 Mobile Grooming</option>
+            <option value="grooming salon">🏠 Grooming Salon</option>
+            <option value="training">🎓 Training</option>
+            <option value="sitting">🏡 Pet Sitting</option>
+            <option value="boarding">🛏️ Boarding</option>
+          </select>
         </div>
         <div class="sf">
           <div class="sf-lbl">Neighborhood</div>
@@ -557,7 +565,15 @@
     <div style="max-width:1200px;margin:0 auto;">
       <h1>Find pet care providers in LA</h1>
       <div class="bs-row">
-        <input class="bs-inp" type="text" id="b-svc" placeholder="Service (grooming, training…)"/>
+        <select class="bs-inp" id="b-svc" onchange="runFilter()" style="cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23999%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;">
+          <option value="">All Services</option>
+          <option value="grooming">🐾 Grooming</option>
+          <option value="mobile groomer">🚐 Mobile Grooming</option>
+          <option value="grooming salon">🏠 Grooming Salon</option>
+          <option value="training">🎓 Training</option>
+          <option value="sitting">🏡 Pet Sitting</option>
+          <option value="boarding">🛏️ Boarding</option>
+        </select>
         <input class="bs-inp" type="text" id="b-loc" placeholder="Neighborhood or zip"/>
         <button class="bs-btn" onclick="runFilter()">Search</button>
       </div>
@@ -714,7 +730,7 @@ function heroSearch() {
   document.getElementById('b-loc').value = loc;
   showPage('browse');
 }
-['h-svc','h-loc'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')heroSearch();}));
+  document.getElementById('h-loc').addEventListener('keydown',e=>{if(e.key==='Enter')heroSearch();});
 
 function filterAndBrowse(svc, loc) {
   document.getElementById('b-svc').value = svc;
