@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pawrber — Find Pet Groomers, Trainers & Sitters in LA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f0f7ff;
+      color: #111;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: #fff;
+      border-bottom: 2px solid #111;
+      display: flex; align-items: center;
+      padding: 0 28px; height: 64px;
+    }
+    .nav-inner { width: 100%; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 20px; }
+    .nav-logo { display: flex; align-items: center; gap: 9px; text-decoration: none; }
+    .nav-logo-box { width: 34px; height: 34px; background: #111; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; color: #111; }
+    .nav-links { display: flex; gap: 24px; margin-left: 32px; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: #666; text-decoration: none; }
+    .nav-links a:hover { color: #111; }
+    .nav-right { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+    .btn-outline-sm { font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 8px; border: 2px solid #ddd; background: #fff; color: #111; cursor: pointer; text-decoration: none; }
+    .btn-black-sm { font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 8px; background: #111; color: #fff; cursor: pointer; text-decoration: none; border: none; }
+
+    /* ── HERO ── */
+    .hero {
+      background: #111;
+      padding: 64px 28px 72px;
+    }
+    .hero-inner { max-width: 1200px; margin: 0 auto; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #1a7a3c; color: #fff;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 99px; margin-bottom: 24px;
+    }
+    .hero-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -2px; color: #fff;
+      margin-bottom: 20px;
+    }
+    .hero-h1 em { font-style: italic; color: #fbbf24; }
+    .hero-sub { font-size: 18px; color: #999; line-height: 1.7; margin-bottom: 40px; max-width: 540px; }
+
+    /* Search */
+    .search-wrap {
+      background: #fff;
+      border-radius: 14px;
+      padding: 8px;
+      display: flex; gap: 0;
+      max-width: 580px;
+      border: 2px solid #333;
+    }
+    .sf { flex: 1; padding: 10px 16px; border-right: 2px solid #eee; }
+    .sf:last-of-type { border-right: none; }
+    .sf-lbl { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #999; margin-bottom: 3px; }
+    .sf-inp { border: none; outline: none; font-family: 'Inter', sans-serif; font-size: 15px; color: #111; background: transparent; width: 100%; }
+    .sf-inp::placeholder { color: #ccc; }
+    .search-btn {
+      background: #1a7a3c; color: #fff;
+      border: none; cursor: pointer;
+      border-radius: 10px; padding: 0 28px;
+      font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700;
+      transition: background .2s; white-space: nowrap;
+    }
+    .search-btn:hover { background: #145f2f; }
+
+    .hero-pills { display: flex; align-items: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+    .hero-pills-lbl { font-size: 13px; color: #666; }
+    .pill { font-size: 13px; font-weight: 500; background: #222; color: #ccc; padding: 6px 14px; border-radius: 99px; text-decoration: none; cursor: pointer; border: none; transition: all .15s; }
+    .pill:hover { background: #fff; color: #111; }
+
+    /* ── GREEN TRUST BAR ── */
+    .trust { background: #1a7a3c; padding: 16px 28px; }
+    .trust-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 8px; color: #fff; font-size: 14px; font-weight: 500; }
+
+    /* ── SECTIONS ── */
+    .section { padding: 72px 28px; }
+    .sec-inner { max-width: 1200px; margin: 0 auto; }
+    .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 36px; flex-wrap: wrap; }
+    .sec-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1a7a3c; margin-bottom: 8px; }
+    .sec-h2 { font-size: clamp(24px, 3vw, 36px); font-weight: 700; color: #111; letter-spacing: -0.5px; line-height: 1.1; }
+    .sec-h2 em { font-style: italic; font-family: 'Playfair Display', serif; color: #1a7a3c; }
+    .see-all { font-size: 14px; font-weight: 700; color: #1a7a3c; text-decoration: none; white-space: nowrap; }
+
+    /* ── PROVIDER GRID ── */
+    .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+
+    /* ── PROVIDER CARD ── */
+    .card {
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 18px;
+      overflow: hidden;
+      text-decoration: none; color: inherit;
+      display: block;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .card:hover { border-color: #111; transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,.12); }
+    .card-img { width: 100%; aspect-ratio: 4/3; background: #e8f0fe; border-bottom: 2px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+    .card-body { padding: 16px 18px 20px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
+    .card-name { font-size: 16px; font-weight: 700; color: #111; line-height: 1.2; }
+    .card-type { font-size: 12px; color: #888; margin-bottom: 10px; }
+    .card-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; font-size: 13px; color: #888; }
+    .card-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 12px; }
+    .card-tag { font-size: 11px; font-weight: 500; background: #f0f7ff; color: #555; padding: 3px 9px; border-radius: 99px; border: 1px solid #c7d9ff; }
+    .card-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid #eee; }
+    .card-price { font-size: 15px; font-weight: 700; color: #111; }
+    .card-cta { font-size: 13px; font-weight: 700; color: #1a7a3c; }
+    .badge-amber { background: #fef3c7; color: #d97706; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+    .badge-green { background: #d1fae5; color: #1a7a3c; font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; }
+    .stars-sm { color: #d97706; font-size: 12px; }
+
+    /* ── NEIGHBORHOODS ── */
+    .hoods-sec { background: #fff; border-top: 2px solid #ddd; border-bottom: 2px solid #ddd; }
+    .hood-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 12px; }
+    .hood-card { background: #f0f7ff; border: 2px solid #c7d9ff; border-radius: 14px; padding: 18px 10px; text-align: center; text-decoration: none; color: #111; transition: all .2s; cursor: pointer; }
+    .hood-card:hover { background: #111; border-color: #111; color: #fff; transform: translateY(-2px); }
+    .hood-emoji { font-size: 26px; margin-bottom: 6px; }
+    .hood-name { font-size: 13px; font-weight: 700; }
+    .hood-count { font-size: 11px; color: #888; margin-top: 2px; }
+    .hood-card:hover .hood-count { color: #aaa; }
+
+    /* ── HOW IT WORKS ── */
+    .how-sec { background: #fff; }
+    .how-card { background: #f0f7ff; border: 2px solid #c7d9ff; border-radius: 20px; padding: 32px 28px; position: relative; }
+    .how-num { font-family: 'Playfair Display', serif; font-size: 80px; font-weight: 700; color: #dde8ff; line-height: 1; position: absolute; top: 16px; right: 20px; letter-spacing: -4px; }
+    .how-icon { width: 50px; height: 50px; background: #111; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 18px; }
+    .how-card h3 { font-size: 19px; font-weight: 700; color: #111; margin-bottom: 10px; }
+    .how-card p { font-size: 15px; color: #666; line-height: 1.7; }
+
+    /* ── PROVIDER CTA ── */
+    .prov-cta { background: #111; border-top: 4px solid #1a7a3c; padding: 72px 28px; }
+    .prov-cta-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 48px; flex-wrap: wrap; }
+    .prov-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1a7a3c; margin-bottom: 12px; }
+    .prov-h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; color: #fff; line-height: 1.1; letter-spacing: -1px; }
+    .prov-h2 em { font-style: italic; color: #fbbf24; }
+    .prov-sub { font-size: 16px; color: #888; margin-top: 12px; max-width: 440px; line-height: 1.7; }
+    .prov-perks { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .perk { display: flex; align-items: center; gap: 10px; font-size: 15px; color: #ccc; }
+    .perk-check { width: 22px; height: 22px; border-radius: 50%; background: #1a7a3c; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; flex-shrink: 0; }
+    .prov-card { background: #1a1a1a; border: 2px solid #333; border-radius: 20px; padding: 32px; min-width: 280px; }
+    .prov-card-lbl { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #555; margin-bottom: 16px; }
+    .prov-price { font-size: 48px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -2px; }
+    .prov-price-note { font-size: 13px; color: #555; margin: 4px 0 20px; }
+    .prow { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #222; font-size: 14px; }
+    .prow:last-of-type { border-bottom: none; }
+    .prow-lbl { color: #666; }
+    .prow-val { color: #fff; font-weight: 600; }
+    .prow-val.g { color: #4ade80; }
+    .prov-cta-btn { display: block; width: 100%; background: #d97706; color: #fff; border: none; cursor: pointer; border-radius: 10px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; text-align: center; margin-top: 20px; text-decoration: none; transition: background .2s; }
+    .prov-cta-btn:hover { background: #b45309; }
+
+    /* ── BROWSE PAGE SPECIFIC ── */
+    .browse-bar { background: #111; padding: 32px 28px; border-bottom: 2px solid #222; }
+    .browse-bar h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 20px; letter-spacing: -0.5px; }
+    .bs-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .bs-inp { flex: 1; min-width: 160px; background: #1a1a1a; border: 2px solid #333; border-radius: 10px; padding: 11px 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: #fff; outline: none; transition: border-color .2s; }
+    .bs-inp::placeholder { color: #555; }
+    .bs-inp:focus { border-color: #1a7a3c; }
+    .bs-btn { background: #1a7a3c; color: #fff; border: none; cursor: pointer; border-radius: 10px; padding: 11px 28px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; transition: background .2s; }
+    .bs-btn:hover { background: #145f2f; }
+    .browse-layout { max-width: 1200px; margin: 0 auto; padding: 28px 28px 80px; display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; }
+    .sidebar { background: #fff; border: 2px solid #ddd; border-radius: 18px; padding: 22px; position: sticky; top: 76px; }
+    .sidebar-title { font-size: 16px; font-weight: 700; color: #111; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 2px solid #eee; }
+    .fg { margin-bottom: 22px; }
+    .fg-lbl { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; margin-bottom: 10px; display: block; }
+    .fo { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 6px; cursor: pointer; transition: background .15s; }
+    .fo:hover { background: #f0f7ff; }
+    .fo input { width: 15px; height: 15px; accent-color: #1a7a3c; cursor: pointer; }
+    .fo-lbl { font-size: 14px; color: #111; flex: 1; }
+    .fo-ct { font-size: 12px; color: #aaa; }
+    .fdiv { height: 2px; background: #eee; margin: 18px 0; }
+    .clear-btn { width: 100%; padding: 10px; background: none; border: 2px solid #eee; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: #888; cursor: pointer; margin-top: 14px; transition: all .15s; }
+    .clear-btn:hover { border-color: #e11d48; color: #e11d48; }
+    .res-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 10px; }
+    .res-count { font-size: 15px; color: #888; }
+    .res-count strong { color: #111; font-weight: 700; }
+    .sort-sel { border: 2px solid #ddd; border-radius: 10px; padding: 8px 14px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: #111; background: #fff; outline: none; cursor: pointer; }
+    .active-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .apill { display: inline-flex; align-items: center; gap: 5px; background: #d1fae5; color: #1a7a3c; font-size: 13px; font-weight: 600; padding: 5px 11px; border-radius: 99px; border: 1.5px solid #6ee7b7; }
+    .apill button { background: none; border: none; cursor: pointer; color: #1a7a3c; font-size: 16px; line-height: 1; padding: 0; opacity: .5; }
+    .apill button:hover { opacity: 1; }
+    .results-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+    .no-res { grid-column:1/-1; text-align:center; padding:56px 20px; }
+    .no-res-emoji { font-size: 48px; margin-bottom: 14px; }
+    .no-res h3 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 8px; }
+    .no-res p { font-size: 15px; color: #888; }
+
+    /* ── PROVIDER PROFILE SPECIFIC ── */
+    .prof-banner { height: 220px; background: #111; position: relative; overflow: hidden; border-bottom: 4px solid #1a7a3c; }
+    .prof-banner-dots { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 26px 26px; }
+    .prof-banner-emoji { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); font-size: 120px; opacity: .1; user-select: none; }
+    .back-link { position: absolute; top: 20px; left: 28px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.5); text-decoration: none; }
+    .back-link:hover { color: #fff; }
+    .prof-header-strip { background: #fff; border-bottom: 2px solid #ddd; }
+    .prof-header { max-width: 1120px; margin: 0 auto; padding: 0 28px; display: flex; align-items: flex-end; gap: 22px; position: relative; top: -40px; }
+    .prof-avatar { width: 82px; height: 82px; border-radius: 18px; background: #f0f7ff; border: 4px solid #fff; box-shadow: 0 4px 16px rgba(0,0,0,.1); display: flex; align-items: center; justify-content: center; font-size: 40px; flex-shrink: 0; }
+    .prof-meta { flex: 1; padding-bottom: 6px; }
+    .prof-name { font-size: clamp(22px, 3vw, 30px); font-weight: 700; color: #111; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 8px; }
+    .prof-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .prof-badge { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 99px; }
+    .pb-black { background: #111; color: #fff; }
+    .pb-green { background: #d1fae5; color: #1a7a3c; }
+    .pb-amber { background: #fef3c7; color: #d97706; }
+    .prof-rating-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .prof-rating { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; color: #111; }
+    .prof-rct { font-size: 14px; color: #888; }
+    .prof-resp { font-size: 13px; font-weight: 600; color: #1a7a3c; }
+    .prof-actions { display: flex; flex-direction: column; gap: 10px; padding-bottom: 6px; flex-shrink: 0; }
+    .btn-book { background: #1a7a3c; color: #fff; border: none; cursor: pointer; border-radius: 10px; padding: 13px 28px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; transition: background .2s; white-space: nowrap; }
+    .btn-book:hover { background: #145f2f; }
+    .btn-msg { background: #fff; color: #111; border: 2px solid #ddd; border-radius: 10px; padding: 11px 28px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+    .btn-msg:hover { border-color: #111; }
+    .prof-body { max-width: 1120px; margin: 0 auto; padding: 0 28px 80px; display: grid; grid-template-columns: 1fr 300px; gap: 28px; align-items: start; }
+    .psec { background: #fff; border: 2px solid #ddd; border-radius: 18px; padding: 26px; margin-bottom: 18px; }
+    .psec:last-child { margin-bottom: 0; }
+    .psec-title { font-size: 17px; font-weight: 700; color: #111; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 2px solid #eee; }
+    .bio-text { font-size: 15px; color: #444; line-height: 1.8; }
+    .spec-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .spec-tag { background: #d1fae5; color: #1a7a3c; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 99px; }
+    .svc-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 0; border-bottom: 1px solid #eee; }
+    .svc-row:last-child { border-bottom: none; }
+    .svc-name { font-size: 15px; font-weight: 600; color: #111; }
+    .svc-desc { font-size: 13px; color: #888; margin-top: 2px; }
+    .svc-price { font-size: 15px; font-weight: 700; color: #111; white-space: nowrap; }
+    .rev-summary { display: flex; align-items: center; gap: 24px; margin-bottom: 22px; padding-bottom: 22px; border-bottom: 2px solid #eee; flex-wrap: wrap; }
+    .rs-big { font-size: 52px; font-weight: 700; color: #111; line-height: 1; letter-spacing: -2px; }
+    .rs-ct { font-size: 13px; color: #888; }
+    .rs-bars { flex: 1; min-width: 150px; display: flex; flex-direction: column; gap: 6px; }
+    .rsbar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #888; }
+    .rsbar-track { flex: 1; height: 8px; background: #f0f7ff; border-radius: 4px; overflow: hidden; border: 1px solid #ddd; }
+    .rsbar-fill { height: 100%; background: #d97706; border-radius: 4px; }
+    .rev-item { padding: 18px 0; border-bottom: 1px solid #eee; }
+    .rev-item:last-child { border-bottom: none; }
+    .rev-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .rev-av { width: 36px; height: 36px; border-radius: 50%; background: #f0f7ff; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: #1a7a3c; flex-shrink: 0; }
+    .rev-author { font-size: 14px; font-weight: 700; color: #111; }
+    .rev-date { font-size: 12px; color: #aaa; }
+    .rev-text { font-size: 14px; color: #555; line-height: 1.7; }
+    .area-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .area-tag { background: #f0f7ff; border: 2px solid #c7d9ff; border-radius: 99px; padding: 5px 13px; font-size: 13px; font-weight: 500; color: #111; }
+    .sbar-card { background: #fff; border: 2px solid #ddd; border-radius: 18px; padding: 22px; margin-bottom: 18px; }
+    .sbar-card:last-child { margin-bottom: 0; }
+    .sbar-title { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; margin-bottom: 14px; }
+    .book-card { background: #111; border-color: #111; }
+    .book-card .sbar-title { color: #444; }
+    .book-big-price { font-size: 42px; font-weight: 700; color: #fff; line-height: 1; letter-spacing: -2px; }
+    .book-note { font-size: 13px; color: #555; margin: 4px 0 22px; }
+    .book-btn { display: block; width: 100%; background: #1a7a3c; color: #fff; border: none; cursor: pointer; border-radius: 10px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; text-align: center; transition: background .2s; }
+    .book-btn:hover { background: #145f2f; }
+    .book-sub-note { font-size: 12px; color: #555; text-align: center; margin-top: 10px; }
+    .info-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+    .info-row:last-child { border-bottom: none; }
+    .info-lbl { color: #888; }
+    .info-val { font-weight: 700; color: #111; }
+    .info-val.g { color: #1a7a3c; }
+    .info-val.a { color: #d97706; }
+    .sim-item { display: flex; align-items: center; gap: 11px; padding: 11px 0; border-bottom: 1px solid #eee; text-decoration: none; color: inherit; transition: opacity .15s; }
+    .sim-item:last-child { border-bottom: none; }
+    .sim-item:hover { opacity: .7; }
+    .sim-emoji { width: 40px; height: 40px; border-radius: 8px; background: #f0f7ff; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .sim-name { font-size: 14px; font-weight: 600; color: #111; }
+    .sim-meta { font-size: 12px; color: #888; margin-top: 2px; }
+
+    /* ── MODAL ── */
+    .overlay { display: none; position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px; }
+    .overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 20px; padding: 36px; width: 100%; max-width: 440px; box-shadow: 0 24px 60px rgba(0,0,0,.2); position: relative; border: 2px solid #ddd; }
+    .modal-x { position: absolute; top: 14px; right: 14px; background: #f0f7ff; border: none; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; font-size: 20px; color: #888; display: flex; align-items: center; justify-content: center; }
+    .modal h2 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 4px; }
+    .modal-sub { font-size: 14px; color: #888; margin-bottom: 22px; }
+    .mf { margin-bottom: 13px; }
+    .mf label { display: block; font-size: 13px; font-weight: 700; color: #111; margin-bottom: 5px; }
+    .mf input, .mf select { width: 100%; border: 2px solid #ddd; border-radius: 10px; padding: 11px 13px; font-family: 'Inter', sans-serif; font-size: 14px; color: #111; background: #f0f7ff; outline: none; transition: border-color .2s; }
+    .mf input:focus, .mf select:focus { border-color: #1a7a3c; background: #fff; }
+    .modal-submit { width: 100%; background: #1a7a3c; color: #fff; border: none; cursor: pointer; border-radius: 10px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; margin-top: 6px; transition: background .2s; }
+    .modal-submit:hover { background: #145f2f; }
+    .modal-ok { display: none; text-align: center; padding: 16px 0; }
+    .modal-ok-emoji { font-size: 52px; margin-bottom: 14px; }
+    .modal-ok h3 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 8px; }
+    .modal-ok p { font-size: 14px; color: #888; line-height: 1.7; }
+
+    /* ── FOOTER ── */
+    .footer { background: #111; padding: 52px 28px 30px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 40px; border-bottom: 1px solid #222; margin-bottom: 28px; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .footer-tagline { font-size: 14px; color: #666; line-height: 1.7; max-width: 220px; }
+    .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #444; margin-bottom: 14px; }
+    .footer-col a { display: block; font-size: 14px; color: #666; text-decoration: none; margin-bottom: 9px; transition: color .15s; }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #444; flex-wrap: wrap; gap: 10px; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px) { .grid-4{grid-template-columns:repeat(2,1fr)} .results-grid{grid-template-columns:repeat(2,1fr)} }
+    @media(max-width:900px) {
+      .nav-links{display:none}
+      .browse-layout{grid-template-columns:1fr; padding:20px 20px 60px}
+      .sidebar{position:static}
+      .prof-body{grid-template-columns:1fr; padding:0 20px 60px}
+      .prof-header{padding:0 20px; flex-wrap:wrap}
+      .prof-actions{flex-direction:row; flex-wrap:wrap}
+      .footer-top{grid-template-columns:1fr 1fr}
+      .prov-cta-inner{flex-direction:column}
+    }
+    @media(max-width:600px) {
+      .section{padding:52px 20px}
+      .grid-4{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+      .hood-grid{grid-template-columns:repeat(2,1fr)}
+      .results-grid{grid-template-columns:1fr}
+      .search-wrap{flex-direction:column}
+      .sf{border-right:none; border-bottom:2px solid #eee}
+      .sf:last-of-type{border-bottom:none}
+      .search-btn{padding:14px; border-radius:10px}
+      .footer-top{grid-template-columns:1fr}
+      .footer-bottom{flex-direction:column; text-align:center}
+      .rev-summary{flex-direction:column; align-items:flex-start}
+    }
+
+    /* PAGE VISIBILITY */
+    .page-home .browse-page, .page-home .profile-page { display: none; }
+    .page-browse .home-page, .page-browse .profile-page { display: none; }
+    .page-profile .home-page, .page-profile .browse-page { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" onclick="showPage('home')">
+      <div class="nav-logo-box">✂️</div>
+      <span class="nav-logo-text">Pawrber</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" onclick="showPage('browse')">Find Providers</a>
+      <a href="#">For Providers</a>
+      <a href="#">How it Works</a>
+    </div>
+    <div class="nav-right">
+      <a href="#" class="btn-outline-sm">List your business</a>
+      <a href="#" class="btn-black-sm">Sign in</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════ HOME PAGE ══════════════════════════════ -->
+<div id="pg-home">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag"><div class="hero-dot"></div>Now live in Los Angeles</div>
+      <h1 class="hero-h1">Your pet deserves<br>the <em>best hands</em><br>in LA.</h1>
+      <p class="hero-sub">Find verified groomers, trainers, and sitters across Los Angeles — all in one place, with real reviews from real owners.</p>
+      <div class="search-wrap">
+        <div class="sf">
+          <div class="sf-lbl">Service</div>
+          <input class="sf-inp" id="h-svc" type="text" placeholder="Grooming, training, sitting…"/>
+        </div>
+        <div class="sf">
+          <div class="sf-lbl">Neighborhood</div>
+          <input class="sf-inp" id="h-loc" type="text" placeholder="Studio City, Silver Lake…"/>
+        </div>
+        <button class="search-btn" onclick="heroSearch()">Search</button>
+      </div>
+      <div class="hero-pills">
+        <span class="hero-pills-lbl">Try:</span>
+        <button class="pill" onclick="filterAndBrowse('grooming','')">🐾 Grooming</button>
+        <button class="pill" onclick="filterAndBrowse('training','')">🎓 Training</button>
+        <button class="pill" onclick="filterAndBrowse('','mobile')">🚐 Mobile</button>
+        <button class="pill" onclick="filterAndBrowse('','Silver Lake')">📍 Silver Lake</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRUST BAR -->
+  <div class="trust">
+    <div class="trust-inner">
+      <div class="trust-item">✓ Every provider verified</div>
+      <div class="trust-item">★ Real reviews only</div>
+      <div class="trust-item">🚐 Mobile & salon options</div>
+      <div class="trust-item">📋 Pet profiles & history</div>
+    </div>
+  </div>
+
+  <!-- TOP RATED -->
+  <section class="section" style="background:#fff;">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <div><div class="sec-eyebrow">Top Rated</div><h2 class="sec-h2">LA's most <em>loved</em> providers</h2></div>
+        <a href="#" class="see-all" onclick="showPage('browse')">See all providers →</a>
+      </div>
+      <div class="grid-4" id="top-grid"></div>
+    </div>
+  </section>
+
+  <!-- NEIGHBORHOODS -->
+  <section class="section hoods-sec">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <div><div class="sec-eyebrow">Browse by area</div><h2 class="sec-h2">Find providers <em>near you</em></h2></div>
+      </div>
+      <div class="hood-grid">
+        <div class="hood-card" onclick="filterAndBrowse('','Studio City')"><div class="hood-emoji">🌴</div><div class="hood-name">Studio City</div><div class="hood-count">14 providers</div></div>
+        <div class="hood-card" onclick="filterAndBrowse('','Silver Lake')"><div class="hood-emoji">☕</div><div class="hood-name">Silver Lake</div><div class="hood-count">22 providers</div></div>
+        <div class="hood-card" onclick="filterAndBrowse('','Los Feliz')"><div class="hood-emoji">🌿</div><div class="hood-name">Los Feliz</div><div class="hood-count">18 providers</div></div>
+        <div class="hood-card" onclick="filterAndBrowse('','Venice')"><div class="hood-emoji">🌊</div><div class="hood-name">Venice</div><div class="hood-count">11 providers</div></div>
+        <div class="hood-card" onclick="filterAndBrowse('','Larchmont')"><div class="hood-emoji">🏡</div><div class="hood-name">Larchmont</div><div class="hood-count">9 providers</div></div>
+        <div class="hood-card" onclick="filterAndBrowse('','Burbank')"><div class="hood-emoji">🎬</div><div class="hood-name">Burbank</div><div class="hood-count">17 providers</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section how-sec">
+    <div class="sec-inner">
+      <div class="sec-head"><div><div class="sec-eyebrow">How it works</div><h2 class="sec-h2">Simple, start to <em>finish.</em></h2></div></div>
+      <div class="grid-3">
+        <div class="how-card"><div class="how-num">1</div><div class="how-icon">🐾</div><h3>Build your pet's profile</h3><p>Breed, coat type, preferred cuts, behavioral notes. Your groomer arrives already knowing your pet — every single time.</p></div>
+        <div class="how-card"><div class="how-num">2</div><div class="how-icon">🔍</div><h3>Find the right provider</h3><p>Search by service and neighborhood. Filter by mobile vs salon, specialty, price, and rating. Every provider is verified.</p></div>
+        <div class="how-card"><div class="how-num">3</div><div class="how-icon">📅</div><h3>Book and you're done</h3><p>Pick a time, get a confirmation, show up. Reviews and visit history stay in one place — the relationship only gets better.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALL PROVIDERS -->
+  <section class="section" style="background:#e8f0fe; border-top:2px solid #c7d9ff;">
+    <div class="sec-inner">
+      <div class="sec-head">
+        <div><div class="sec-eyebrow">All Providers</div><h2 class="sec-h2">Browse <em>every</em> provider in LA</h2></div>
+        <a href="#" class="see-all" onclick="showPage('browse')">Filter & sort →</a>
+      </div>
+      <div class="grid-4" id="all-grid"></div>
+    </div>
+  </section>
+
+  <!-- PROVIDER CTA -->
+  <div class="prov-cta">
+    <div class="prov-cta-inner">
+      <div>
+        <div class="prov-eyebrow">For Providers</div>
+        <h2 class="prov-h2">Your craft deserves<br>a <em>proper home.</em></h2>
+        <p class="prov-sub">Join LA's growing pet care platform. Build your profile, get discovered, fill your schedule.</p>
+        <div class="prov-perks">
+          <div class="perk"><div class="perk-check">✓</div>No booking commission — ever</div>
+          <div class="perk"><div class="perk-check">✓</div>Pet profiles before every appointment</div>
+          <div class="perk"><div class="perk-check">✓</div>Verified reviews build your reputation</div>
+          <div class="perk"><div class="perk-check">✓</div>Free for founding members</div>
+        </div>
+      </div>
+      <div class="prov-card">
+        <div class="prov-card-lbl">Founding Member Pricing</div>
+        <div class="prov-price">$0</div>
+        <div class="prov-price-note">Free while we launch · then $49–99/mo</div>
+        <div class="prow"><span class="prow-lbl">Booking commission</span><span class="prow-val g">None</span></div>
+        <div class="prow"><span class="prow-lbl">Profile & listings</span><span class="prow-val g">Included</span></div>
+        <div class="prow"><span class="prow-lbl">Pet profile access</span><span class="prow-val g">Included</span></div>
+        <div class="prow"><span class="prow-lbl">Verified reviews</span><span class="prow-val g">Included</span></div>
+        <a href="#" class="prov-cta-btn">Claim your spot →</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /pg-home -->
+
+<!-- ══════════════════════════════ BROWSE PAGE ══════════════════════════════ -->
+<div id="pg-browse" style="display:none;">
+  <div class="browse-bar">
+    <div style="max-width:1200px;margin:0 auto;">
+      <h1>Find pet care providers in LA</h1>
+      <div class="bs-row">
+        <input class="bs-inp" type="text" id="b-svc" placeholder="Service (grooming, training…)"/>
+        <input class="bs-inp" type="text" id="b-loc" placeholder="Neighborhood or zip"/>
+        <button class="bs-btn" onclick="runFilter()">Search</button>
+      </div>
+    </div>
+  </div>
+  <div class="browse-layout">
+    <aside class="sidebar">
+      <div class="sidebar-title">Filters</div>
+      <div class="fg">
+        <span class="fg-lbl">Service Type</span>
+        <label class="fo"><input type="checkbox" value="grooming" onchange="runFilter()"/><span class="fo-lbl">Grooming</span><span class="fo-ct">5</span></label>
+        <label class="fo"><input type="checkbox" value="training" onchange="runFilter()"/><span class="fo-lbl">Training</span><span class="fo-ct">2</span></label>
+        <label class="fo"><input type="checkbox" value="sitting" onchange="runFilter()"/><span class="fo-lbl">Pet Sitting</span><span class="fo-ct">3</span></label>
+      </div>
+      <div class="fdiv"></div>
+      <div class="fg">
+        <span class="fg-lbl">Provider Type</span>
+        <label class="fo"><input type="checkbox" value="mobile" id="f-mobile" onchange="runFilter()"/><span class="fo-lbl">🚐 Mobile</span><span class="fo-ct">4</span></label>
+        <label class="fo"><input type="checkbox" value="salon" id="f-salon" onchange="runFilter()"/><span class="fo-lbl">🏠 Salon</span><span class="fo-ct">3</span></label>
+      </div>
+      <div class="fdiv"></div>
+      <div class="fg">
+        <span class="fg-lbl">Neighborhood</span>
+        <label class="fo"><input type="checkbox" value="Studio City" onchange="runFilter()"/><span class="fo-lbl">Studio City</span></label>
+        <label class="fo"><input type="checkbox" value="Silver Lake" onchange="runFilter()"/><span class="fo-lbl">Silver Lake</span></label>
+        <label class="fo"><input type="checkbox" value="Los Feliz" onchange="runFilter()"/><span class="fo-lbl">Los Feliz</span></label>
+        <label class="fo"><input type="checkbox" value="Venice" onchange="runFilter()"/><span class="fo-lbl">Venice</span></label>
+        <label class="fo"><input type="checkbox" value="Larchmont" onchange="runFilter()"/><span class="fo-lbl">Larchmont</span></label>
+        <label class="fo"><input type="checkbox" value="Burbank" onchange="runFilter()"/><span class="fo-lbl">Burbank</span></label>
+        <label class="fo"><input type="checkbox" value="Pasadena" onchange="runFilter()"/><span class="fo-lbl">Pasadena</span></label>
+        <label class="fo"><input type="checkbox" value="East LA" onchange="runFilter()"/><span class="fo-lbl">East LA</span></label>
+      </div>
+      <div class="fdiv"></div>
+      <div class="fg">
+        <span class="fg-lbl">Minimum Rating</span>
+        <label class="fo"><input type="radio" name="rat" value="4.5" onchange="runFilter()"/><span class="fo-lbl">★ 4.5 & up</span></label>
+        <label class="fo"><input type="radio" name="rat" value="4.0" onchange="runFilter()"/><span class="fo-lbl">★ 4.0 & up</span></label>
+        <label class="fo"><input type="radio" name="rat" value="0" onchange="runFilter()" checked/><span class="fo-lbl">Any rating</span></label>
+      </div>
+      <button class="clear-btn" onclick="clearFilters()">Clear all filters</button>
+    </aside>
+    <div>
+      <div class="res-header">
+        <div class="res-count"><strong id="rcount">8</strong> providers in Los Angeles</div>
+        <select class="sort-sel" onchange="runFilter()">
+          <option value="rating">Top Rated</option>
+          <option value="reviews">Most Reviewed</option>
+          <option value="price-asc">Price: Low → High</option>
+          <option value="price-desc">Price: High → Low</option>
+        </select>
+      </div>
+      <div class="active-pills" id="apills"></div>
+      <div class="results-grid" id="rgrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ PROFILE PAGE ══════════════════════════════ -->
+<div id="pg-profile" style="display:none;"></div>
+
+<!-- FOOTER -->
+<footer class="footer" id="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div><div class="footer-logo">Pawrber</div><p class="footer-tagline">Connecting LA pet owners with trusted groomers, trainers, and sitters.</p></div>
+      <div class="footer-col"><h4>For Owners</h4><a href="#" onclick="showPage('browse')">Find Providers</a><a href="#">Create Pet Profile</a><a href="#">How it Works</a></div>
+      <div class="footer-col"><h4>For Providers</h4><a href="#">List Your Business</a><a href="#">Pricing</a><a href="#">Provider Login</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="#">About</a><a href="#">Contact</a><a href="#">Privacy</a></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Pawrber. Los Angeles, CA.</span><span>Made for pets, built for their people.</span></div>
+  </div>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="overlay" id="modal">
+  <div class="modal">
+    <button class="modal-x" onclick="closeModal()">×</button>
+    <div id="mform">
+      <h2>Request a booking</h2>
+      <p class="modal-sub" id="mprov"></p>
+      <div class="mf"><label>Your name</label><input type="text" placeholder="Full name"/></div>
+      <div class="mf"><label>Email</label><input type="email" placeholder="you@email.com"/></div>
+      <div class="mf"><label>Service</label><select id="msvcs"></select></div>
+      <div class="mf"><label>Preferred date</label><input type="date"/></div>
+      <div class="mf"><label>Pet name & breed</label><input type="text" placeholder="e.g. Biscuit, Golden Doodle"/></div>
+      <button class="modal-submit" onclick="submitModal()">Request Appointment</button>
+    </div>
+    <div class="modal-ok" id="mok">
+      <div class="modal-ok-emoji">🐾</div>
+      <h3>Request sent!</h3>
+      <p>We've notified <span id="mok-name"></span>. They'll confirm within 24 hours.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const PROVIDERS = [
+  { id:"luna-mobile", name:"Luna Mobile Grooming", type:"Mobile Groomer", emoji:"🐾", neighborhood:"Studio City", areas:["Studio City","Sherman Oaks","Toluca Lake","Burbank"], rating:4.9, reviewCount:84, mobile:true, salon:false, price:85, priceLabel:"from $85", services:["Full Groom","Bath & Brush","De-shed Treatment","Puppy First Groom"], bio:"Certified master groomer with 9 years of experience. I bring the salon to your driveway — fully equipped van, stress-free environment, one dog at a time. Specializing in doodles, poodles, and double-coated breeds.", specialties:["Doodles","Double Coats","Anxious Dogs"], response:"Within 1 hr", verified:true, topRated:true, reviews:[{author:"Melissa T.",rating:5,text:"Luna is incredible. My goldendoodle Archie used to shake at the groomer — now he runs to her van.",date:"May 2026"},{author:"Derek S.",rating:5,text:"Punctual, professional, and Bentley looked like he belongs in a show. Booked her for 3 months already.",date:"April 2026"},{author:"Priya K.",rating:5,text:"The convenience alone is worth it, but Luna's skill takes it to another level.",date:"April 2026"}] },
+  { id:"well-groomed", name:"The Well Groomed", type:"Grooming Salon", emoji:"✂️", neighborhood:"Silver Lake", areas:["Silver Lake","Los Feliz","Echo Park","Atwater Village"], rating:4.8, reviewCount:212, mobile:false, salon:true, price:65, priceLabel:"from $65", services:["Full Groom","Bath & Trim","Blueberry Facial","Teeth Brushing","Nail Grinding"], bio:"Silver Lake's neighborhood grooming salon since 2019. Calm, unhurried, and personal. No cages between appointments. Your dog is never just waiting — they're hanging out.", specialties:["Small Breeds","Senior Dogs","Cat Grooming"], response:"Same day", verified:true, topRated:true, reviews:[{author:"Jordan M.",rating:5,text:"The only salon where my cat doesn't come home traumatized. Incredibly gentle.",date:"June 2026"},{author:"Ana R.",rating:5,text:"Consistent, affordable, they remember exactly how I like Mochi's cut every time.",date:"May 2026"},{author:"Chris L.",rating:4,text:"Great salon, friendly staff. Worth the wait.",date:"April 2026"}] },
+  { id:"paws-motion", name:"Paws in Motion", type:"Dog Trainer", emoji:"🎓", neighborhood:"Los Feliz", areas:["Los Feliz","Silver Lake","Griffith Park","East Hollywood"], rating:5.0, reviewCount:47, mobile:true, salon:false, price:120, priceLabel:"from $120/session", services:["Private Training","Puppy Foundation","Leash Reactivity","Aggression Rehab","Group Classes"], bio:"CPDT-KA certified trainer using force-free, science-based methods. I work with dogs of all ages — from 8-week-old puppies to 10-year-old rescue dogs learning new tricks.", specialties:["Reactive Dogs","Puppy Training","Fear & Anxiety"], response:"Within 2 hrs", verified:true, topRated:true, reviews:[{author:"Sam W.",rating:5,text:"My rescue pit bull was dangerously reactive. After 6 sessions we can walk past other dogs. I genuinely cried.",date:"May 2026"},{author:"Tanya B.",rating:5,text:"Best investment for my puppy. Highly recommend the puppy foundation package.",date:"March 2026"},{author:"Mike D.",rating:5,text:"Force-free training actually works. My shepherd is a different dog.",date:"April 2026"}] },
+  { id:"golden-shears", name:"Golden Shears Mobile", type:"Mobile Groomer", emoji:"🚐", neighborhood:"Burbank", areas:["Burbank","North Hollywood","Glendale","Toluca Lake"], rating:4.7, reviewCount:133, mobile:true, salon:false, price:75, priceLabel:"from $75", services:["Full Groom","Bath & Brush","De-matting","Breed-Specific Styling"], bio:"Family-run mobile grooming serving the San Fernando Valley for 7 years. Two vans, two certified groomers. No dog too big.", specialties:["Large Breeds","Breed Cuts","Multi-Dog"], response:"Within 3 hrs", verified:true, topRated:false, reviews:[{author:"Lisa G.",rating:5,text:"They do all three of my dogs in one visit. That alone is 5 stars.",date:"May 2026"},{author:"Ryan P.",rating:4,text:"Solid groomer, my husky's de-shed was thorough. Fair pricing.",date:"April 2026"},{author:"Maria C.",rating:5,text:"Handled my Great Pyrenees without complaint. Excellent.",date:"March 2026"}] },
+  { id:"fig-fern", name:"Fig & Fern Pet Care", type:"Grooming Salon", emoji:"🌿", neighborhood:"Larchmont", areas:["Larchmont","Hancock Park","Mid-Wilshire","Koreatown"], rating:4.9, reviewCount:98, mobile:false, salon:true, price:70, priceLabel:"from $70", services:["Full Groom","Organic Treatments","Aromatherapy Bath","Puppy Intro","Nail Art"], bio:"Boutique salon in Larchmont Village using exclusively organic, plant-based products. No harsh chemicals, no cage drying. Just calm, intentional grooming.", specialties:["Sensitive Skin","Small & Toy Breeds","Organic"], response:"Same day", verified:true, topRated:true, reviews:[{author:"Hana L.",rating:5,text:"My French bulldog has skin allergies. Fig & Fern is the only place she doesn't break out after.",date:"June 2026"},{author:"Oliver T.",rating:5,text:"Feels more like a spa than a groomer. Genuinely calming for both of us.",date:"May 2026"},{author:"Rachel N.",rating:5,text:"The aromatherapy bath is now a monthly ritual. She smells amazing for weeks.",date:"April 2026"}] },
+  { id:"east-k9", name:"East Side K9", type:"Trainer & Behaviorist", emoji:"🦮", neighborhood:"East LA", areas:["East LA","Boyle Heights","Montebello","Commerce"], rating:4.8, reviewCount:61, mobile:true, salon:false, price:95, priceLabel:"from $95/session", services:["In-Home Training","Board & Train","Behavior Modification","Separation Anxiety","Multi-Dog"], bio:"Bilingual trainer (English/Spanish) serving East LA. Specializing in behavior modification for rescue dogs and multi-dog households.", specialties:["Rescue Dogs","Multi-Dog","Bilingual"], response:"Within 2 hrs", verified:true, topRated:false, reviews:[{author:"Carmen V.",rating:5,text:"Worked with my two rescue pit bulls who couldn't be in the same room. They now sleep next to each other.",date:"May 2026"},{author:"David R.",rating:5,text:"Bilingual sessions made such a difference for my family. Best in East LA.",date:"April 2026"},{author:"Lucia M.",rating:4,text:"Separation anxiety work is in progress but I already see improvement.",date:"March 2026"}] },
+  { id:"venice-wag", name:"Venice Wag", type:"Mobile Groomer", emoji:"🌊", neighborhood:"Venice", areas:["Venice","Mar Vista","Culver City","Santa Monica"], rating:4.8, reviewCount:76, mobile:true, salon:false, price:90, priceLabel:"from $90", services:["Full Groom","Bath & Dry","Show Prep","Puppy Package","Senior Dog Handling"], bio:"Westside mobile groomer specializing in show-prep styling and senior dog handling. Trained at one of LA's top show kennels.", specialties:["Show Breeds","Senior Dogs","Westside"], response:"Within 2 hrs", verified:true, topRated:false, reviews:[{author:"Brett K.",rating:5,text:"My 13-year-old lab can't handle traditional salons. Venice Wag is gentle and does beautiful work.",date:"June 2026"},{author:"Anya S.",rating:5,text:"Show-quality groom for my Bichon. Rare skill.",date:"May 2026"},{author:"Tom H.",rating:4,text:"Worth the price. My cavapoo looked perfect.",date:"April 2026"}] },
+  { id:"bark-avenue", name:"Bark Avenue", type:"Grooming Salon", emoji:"🏡", neighborhood:"Pasadena", areas:["Pasadena","Arcadia","Monrovia","Alhambra"], rating:4.6, reviewCount:159, mobile:false, salon:true, price:55, priceLabel:"from $55", services:["Full Groom","Bath & Trim","De-shed","Flea Treatment","Walk-Ins Welcome"], bio:"Pasadena's most trusted salon — open 7 days, walk-ins welcome. Serving the San Gabriel Valley for over a decade.", specialties:["Walk-Ins","All Breeds","Value Pricing"], response:"Same day", verified:true, topRated:false, reviews:[{author:"Kevin L.",rating:5,text:"Best value in Pasadena. Consistent results, never had a bad experience in 3 years.",date:"June 2026"},{author:"Susan M.",rating:4,text:"Walk-in availability is a lifesaver. They squeezed us in before a trip.",date:"May 2026"},{author:"Jason T.",rating:5,text:"Reliable, affordable, they've never hurt my dog.",date:"April 2026"}] }
+];
+
+// ── HELPERS ──
+function stars(r) {
+  let h='';
+  for(let i=1;i<=5;i++) h+=`<span class="${i<=Math.round(r)?'':''}">★</span>`;
+  return `<span class="stars-sm">${'★'.repeat(Math.round(r))}</span>`;
+}
+
+function renderCard(p) {
+  return `<a href="#" class="card" onclick="showProfile('${p.id}');return false;">
+    <div class="card-img">${p.emoji}</div>
+    <div class="card-body">
+      <div class="card-top">
+        <div><div class="card-name">${p.name}</div><div class="card-type">${p.type} · ${p.neighborhood}</div></div>
+        ${p.topRated?'<span class="badge-amber">★ Top</span>':''}
+      </div>
+      <div class="card-meta">
+        <span>${stars(p.rating)} <strong style="color:#111">${p.rating}</strong> (${p.reviewCount})</span>
+        <span>${p.mobile?'🚐 Mobile':'🏠 Salon'}</span>
+      </div>
+      <div class="card-tags">${p.services.slice(0,3).map(s=>`<span class="card-tag">${s}</span>`).join('')}${p.services.length>3?`<span class="card-tag">+${p.services.length-3}</span>`:''}</div>
+      <div class="card-foot"><span class="card-price">${p.priceLabel}</span><span class="card-cta">View profile →</span></div>
+    </div>
+  </a>`;
+}
+
+// ── PAGE ROUTING ──
+let currentPage = 'home';
+
+function showPage(page) {
+  document.getElementById('pg-home').style.display    = page==='home'    ? '' : 'none';
+  document.getElementById('pg-browse').style.display  = page==='browse'  ? '' : 'none';
+  document.getElementById('pg-profile').style.display = page==='profile' ? '' : 'none';
+  currentPage = page;
+  window.scrollTo(0,0);
+  if(page==='browse') runFilter();
+}
+
+// ── HOME ──
+document.getElementById('top-grid').innerHTML = PROVIDERS.filter(p=>p.topRated).slice(0,4).map(renderCard).join('');
+document.getElementById('all-grid').innerHTML = PROVIDERS.map(renderCard).join('');
+
+function heroSearch() {
+  const svc = document.getElementById('h-svc').value.trim();
+  const loc = document.getElementById('h-loc').value.trim();
+  document.getElementById('b-svc').value = svc;
+  document.getElementById('b-loc').value = loc;
+  showPage('browse');
+}
+['h-svc','h-loc'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')heroSearch();}));
+
+function filterAndBrowse(svc, loc) {
+  document.getElementById('b-svc').value = svc;
+  document.getElementById('b-loc').value = loc;
+  showPage('browse');
+}
+
+// ── BROWSE / FILTER ──
+let pillClearers = [];
+
+function runFilter() {
+  const svc  = document.getElementById('b-svc').value.toLowerCase().trim();
+  const loc  = document.getElementById('b-loc').value.toLowerCase().trim();
+  const types = [...document.querySelectorAll('#f-mobile,#f-salon')].filter(c=>c.checked).map(c=>c.value);
+  const hoods = [...document.querySelectorAll('.sidebar input[type=checkbox]')].filter(c=>c.checked&&!['grooming','training','sitting','mobile','salon'].includes(c.value)).map(c=>c.value);
+  const rat   = parseFloat(document.querySelector('input[name=rat]:checked')?.value||0);
+  const sort  = document.querySelector('.sort-sel').value;
+
+  let res = [...PROVIDERS];
+  if(svc) res=res.filter(p=>p.type.toLowerCase().includes(svc)||p.services.some(s=>s.toLowerCase().includes(svc))||p.name.toLowerCase().includes(svc));
+  if(loc) res=res.filter(p=>p.neighborhood.toLowerCase().includes(loc)||p.areas.some(a=>a.toLowerCase().includes(loc)));
+  if(types.length) res=res.filter(p=>(types.includes('mobile')&&p.mobile)||(types.includes('salon')&&p.salon));
+  if(hoods.length) res=res.filter(p=>hoods.includes(p.neighborhood)||p.areas.some(a=>hoods.includes(a)));
+  if(rat>0) res=res.filter(p=>p.rating>=rat);
+  if(sort==='rating')    res.sort((a,b)=>b.rating-a.rating);
+  if(sort==='reviews')   res.sort((a,b)=>b.reviewCount-a.reviewCount);
+  if(sort==='price-asc') res.sort((a,b)=>a.price-b.price);
+  if(sort==='price-desc')res.sort((a,b)=>b.price-a.price);
+
+  // Pills
+  pillClearers=[];
+  const pills=[];
+  if(svc){pills.push(svc);pillClearers.push(()=>{document.getElementById('b-svc').value='';runFilter();});}
+  if(loc){pills.push(loc);pillClearers.push(()=>{document.getElementById('b-loc').value='';runFilter();});}
+  types.forEach(t=>{pills.push(t==='mobile'?'🚐 Mobile':'🏠 Salon');pillClearers.push(()=>{document.getElementById('f-'+t).checked=false;runFilter();});});
+  hoods.forEach(h=>{pills.push(h);pillClearers.push(()=>{});});
+
+  document.getElementById('apills').innerHTML=pills.map((p,i)=>`<div class="apill">${p}<button onclick="pillClearers[${i}]()">×</button></div>`).join('');
+  document.getElementById('rcount').textContent=res.length;
+  document.getElementById('rgrid').innerHTML=res.length
+    ?res.map(renderCard).join('')
+    :`<div class="no-res"><div class="no-res-emoji">🔍</div><h3>No providers found</h3><p>Try adjusting your filters.</p></div>`;
+}
+
+function clearFilters() {
+  document.querySelectorAll('.sidebar input[type=checkbox]').forEach(c=>c.checked=false);
+  document.querySelectorAll('.sidebar input[type=radio]').forEach(r=>r.checked=false);
+  document.querySelector('input[name=rat][value="0"]').checked=true;
+  document.getElementById('b-svc').value='';
+  document.getElementById('b-loc').value='';
+  runFilter();
+}
+['b-svc','b-loc'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')runFilter();}));
+
+// ── PROFILE ──
+function showProfile(id) {
+  const p = PROVIDERS.find(x=>x.id===id)||PROVIDERS[0];
+  const similar = PROVIDERS.filter(x=>x.id!==p.id&&(x.type===p.type||x.mobile===p.mobile)).slice(0,3);
+
+  function bars() {
+    const c=[0,0,0,0,0];
+    p.reviews.forEach(r=>c[r.rating-1]++);
+    return [5,4,3,2,1].map(s=>{
+      const n=c[s-1], pct=Math.round((n/p.reviews.length)*100);
+      return `<div class="rsbar-row"><span style="width:10px;text-align:right">${s}</span><div class="rsbar-track"><div class="rsbar-fill" style="width:${pct}%"></div></div><span>${n}</span></div>`;
+    }).join('');
+  }
+
+  document.getElementById('pg-profile').innerHTML = `
+    <div class="prof-banner">
+      <div class="prof-banner-dots"></div>
+      <div class="prof-banner-emoji">${p.emoji}</div>
+      <a href="#" class="back-link" onclick="showPage('browse');return false;">← Back to results</a>
+    </div>
+    <div class="prof-header-strip">
+      <div class="prof-header">
+        <div class="prof-avatar">${p.emoji}</div>
+        <div class="prof-meta">
+          <div class="prof-name">${p.name}</div>
+          <div class="prof-badges">
+            <span class="prof-badge pb-black">${p.type}</span>
+            ${p.verified?'<span class="prof-badge pb-green">✓ Verified</span>':''}
+            ${p.topRated?'<span class="prof-badge pb-amber">★ Top Rated</span>':''}
+            <span class="prof-badge pb-black">${p.mobile?'🚐 Mobile':'🏠 Salon'}</span>
+          </div>
+          <div class="prof-rating-row">
+            <div class="prof-rating"><span style="color:#d97706">★</span> ${p.rating}</div>
+            <span class="prof-rct">${p.reviewCount} reviews</span>
+            <span class="prof-resp">⚡ ${p.response}</span>
+          </div>
+        </div>
+        <div class="prof-actions">
+          <button class="btn-book" onclick="openModal('${p.id}')">Book Appointment</button>
+          <button class="btn-msg">Send Message</button>
+        </div>
+      </div>
+    </div>
+    <div class="prof-body">
+      <div>
+        <div class="psec">
+          <div class="psec-title">About</div>
+          <p class="bio-text">${p.bio}</p>
+          <div class="spec-tags">${p.specialties.map(s=>`<span class="spec-tag">${s}</span>`).join('')}</div>
+        </div>
+        <div class="psec">
+          <div class="psec-title">Services & Pricing</div>
+          ${p.services.map((s,i)=>`<div class="svc-row"><div><div class="svc-name">${s}</div><div class="svc-desc">Contact for availability</div></div><div class="svc-price">from $${p.price+(i*10)}</div></div>`).join('')}
+        </div>
+        <div class="psec">
+          <div class="psec-title">Reviews</div>
+          <div class="rev-summary">
+            <div><div class="rs-big">${p.rating}</div><div style="color:#d97706;font-size:18px;margin:4px 0">★★★★★</div><div class="rs-ct">${p.reviewCount} reviews</div></div>
+            <div class="rs-bars">${bars()}</div>
+          </div>
+          ${p.reviews.map(r=>`<div class="rev-item"><div class="rev-top"><div class="rev-av">${r.author.charAt(0)}</div><div><div class="rev-author">${r.author}</div><div class="rev-date">${r.date}</div></div><span style="color:#d97706;margin-left:auto">${'★'.repeat(r.rating)}</span></div><p class="rev-text">"${r.text}"</p></div>`).join('')}
+        </div>
+        <div class="psec">
+          <div class="psec-title">Service Area</div>
+          <div class="area-tags">${p.areas.map(a=>`<span class="area-tag">📍 ${a}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div>
+        <div class="sbar-card book-card">
+          <div class="sbar-title">Starting Price</div>
+          <div class="book-big-price">$${p.price}</div>
+          <div class="book-note">${p.priceLabel} · varies by service</div>
+          <button class="book-btn" onclick="openModal('${p.id}')">Book an Appointment</button>
+          <div class="book-sub-note">No charge until confirmed</div>
+        </div>
+        <div class="sbar-card">
+          <div class="sbar-title">Details</div>
+          <div class="info-row"><span class="info-lbl">Neighborhood</span><span class="info-val">${p.neighborhood}</span></div>
+          <div class="info-row"><span class="info-lbl">Type</span><span class="info-val">${p.mobile?'Mobile':'Salon'}</span></div>
+          <div class="info-row"><span class="info-lbl">Response time</span><span class="info-val g">${p.response}</span></div>
+          <div class="info-row"><span class="info-lbl">Rating</span><span class="info-val a">★ ${p.rating} (${p.reviewCount})</span></div>
+          <div class="info-row"><span class="info-lbl">Verified</span><span class="info-val g">✓ Yes</span></div>
+        </div>
+        ${similar.length?`<div class="sbar-card"><div class="sbar-title">Similar Providers</div>${similar.map(s=>`<a href="#" class="sim-item" onclick="showProfile('${s.id}');return false;"><div class="sim-emoji">${s.emoji}</div><div><div class="sim-name">${s.name}</div><div class="sim-meta">★ ${s.rating} · ${s.neighborhood}</div></div></a>`).join('')}</div>`:''}
+      </div>
+    </div>
+  `;
+  showPage('profile');
+}
+
+// ── MODAL ──
+let currentProvId = null;
+function openModal(id) {
+  currentProvId = id;
+  const p = PROVIDERS.find(x=>x.id===id);
+  document.getElementById('mprov').textContent = 'with ' + p.name;
+  document.getElementById('msvcs').innerHTML = p.services.map(s=>`<option>${s}</option>`).join('');
+  document.getElementById('mform').style.display='block';
+  document.getElementById('mok').style.display='none';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function submitModal() {
+  const p = PROVIDERS.find(x=>x.id===currentProvId);
+  document.getElementById('mform').style.display='none';
+  document.getElementById('mok-name').textContent=p.name;
+  document.getElementById('mok').style.display='block';
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal();});
+</script>
+</body>
+</html>
