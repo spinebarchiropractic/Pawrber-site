@@ -86,6 +86,66 @@
     }
     .search-btn:hover { background: #145f2f; }
 
+    /* ── LIVE SEARCH AUTOCOMPLETE ── */
+    .search-wrap { position: relative; }
+    .autocomplete-box {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0; right: 0;
+      background: #fff;
+      border: 2px solid #111;
+      border-radius: 14px;
+      overflow: hidden;
+      z-index: 300;
+      box-shadow: 0 12px 36px rgba(0,0,0,.18);
+    }
+    .autocomplete-box.open { display: block; }
+    .ac-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 12px 18px;
+      cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background .12s;
+      text-decoration: none; color: inherit;
+    }
+    .ac-item:last-child { border-bottom: none; }
+    .ac-item:hover { background: #f0f7ff; }
+    .ac-emoji { font-size: 22px; width: 36px; height: 36px; background: #f0f7ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ac-info {}
+    .ac-name { font-size: 14px; font-weight: 700; color: #111; }
+    .ac-name mark { background: #fef3c7; color: #111; border-radius: 2px; font-weight: 700; }
+    .ac-meta { font-size: 12px; color: #888; margin-top: 1px; }
+    .ac-no-results { padding: 16px 18px; font-size: 14px; color: #888; text-align: center; }
+
+    /* ── LIST YOUR BUSINESS MODAL ── */
+    .ltb-steps { display: flex; gap: 8px; margin-bottom: 24px; }
+    .ltb-step { flex: 1; height: 4px; border-radius: 2px; background: #eee; transition: background .3s; }
+    .ltb-step.active { background: #1a7a3c; }
+    .ltb-step-content { display: none; }
+    .ltb-step-content.show { display: block; }
+    .ltb-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #1a7a3c; margin-bottom: 6px; }
+    .ltb-title { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 4px; }
+    .ltb-sub { font-size: 14px; color: #888; margin-bottom: 24px; line-height: 1.6; }
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .type-opt {
+      border: 2px solid #ddd; border-radius: 12px; padding: 14px 12px;
+      text-align: center; cursor: pointer; transition: all .15s;
+      background: #fff;
+    }
+    .type-opt:hover { border-color: #1a7a3c; background: #f0fff4; }
+    .type-opt.selected { border-color: #1a7a3c; background: #d1fae5; }
+    .type-opt-emoji { font-size: 24px; margin-bottom: 6px; }
+    .type-opt-label { font-size: 13px; font-weight: 700; color: #111; }
+    .ltb-btn { width: 100%; background: #1a7a3c; color: #fff; border: none; cursor: pointer; border-radius: 10px; padding: 14px; font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; transition: background .2s; margin-top: 8px; }
+    .ltb-btn:hover { background: #145f2f; }
+    .ltb-btn-outline { background: #fff; color: #111; border: 2px solid #ddd; margin-top: 8px; }
+    .ltb-btn-outline:hover { border-color: #111; background: #f8f8f8; }
+    .ltb-success { text-align: center; padding: 20px 0; }
+    .ltb-success-emoji { font-size: 56px; margin-bottom: 16px; }
+    .ltb-success h3 { font-size: 22px; font-weight: 700; color: #111; margin-bottom: 8px; }
+    .ltb-success p { font-size: 14px; color: #888; line-height: 1.7; }
+
     .hero-pills { display: flex; align-items: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
     .hero-pills-lbl { font-size: 13px; color: #666; }
     .pill { font-size: 13px; font-weight: 500; background: #222; color: #ccc; padding: 6px 14px; border-radius: 99px; text-decoration: none; cursor: pointer; border: none; transition: all .15s; }
@@ -364,8 +424,8 @@
       <a href="#">How it Works</a>
     </div>
     <div class="nav-right">
-      <a href="#" class="btn-outline-sm">List your business</a>
-      <a href="#" class="btn-black-sm">Sign in</a>
+      <a href="#" class="btn-outline-sm" onclick="openLTB();return false;">List your business</a>
+      <a href="#" class="btn-black-sm" onclick="openSignIn();return false;">Sign in</a>
     </div>
   </div>
 </nav>
@@ -379,16 +439,17 @@
       <div class="hero-tag"><div class="hero-dot"></div>Now live in Los Angeles</div>
       <h1 class="hero-h1">Your pet deserves<br>the <em>best hands</em><br>in LA.</h1>
       <p class="hero-sub">Find verified groomers, trainers, and sitters across Los Angeles — all in one place, with real reviews from real owners.</p>
-      <div class="search-wrap">
+      <div class="search-wrap" id="hero-search-wrap">
         <div class="sf">
-          <div class="sf-lbl">Service</div>
-          <input class="sf-inp" id="h-svc" type="text" placeholder="Grooming, training, sitting…"/>
+          <div class="sf-lbl">Service or Provider</div>
+          <input class="sf-inp" id="h-svc" type="text" placeholder="Grooming, training, Happy Paws…" oninput="heroAutocomplete(this.value)" onkeydown="if(event.key==='Enter')heroSearch()" autocomplete="off"/>
         </div>
         <div class="sf">
           <div class="sf-lbl">Neighborhood</div>
-          <input class="sf-inp" id="h-loc" type="text" placeholder="Studio City, Silver Lake…"/>
+          <input class="sf-inp" id="h-loc" type="text" placeholder="Studio City, Silver Lake…" onkeydown="if(event.key==='Enter')heroSearch()"/>
         </div>
         <button class="search-btn" onclick="heroSearch()">Search</button>
+        <div class="autocomplete-box" id="hero-ac"></div>
       </div>
       <div class="hero-pills">
         <span class="hero-pills-lbl">Try:</span>
@@ -483,7 +544,7 @@
         <div class="prow"><span class="prow-lbl">Profile & listings</span><span class="prow-val g">Included</span></div>
         <div class="prow"><span class="prow-lbl">Pet profile access</span><span class="prow-val g">Included</span></div>
         <div class="prow"><span class="prow-lbl">Verified reviews</span><span class="prow-val g">Included</span></div>
-        <a href="#" class="prov-cta-btn">Claim your spot →</a>
+        <a href="#" class="prov-cta-btn" onclick="openLTB();return false;">Claim your spot →</a>
       </div>
     </div>
   </div>
@@ -747,7 +808,7 @@ function showProfile(id) {
         </div>
         <div class="prof-actions">
           <button class="btn-book" onclick="openModal('${p.id}')">Book Appointment</button>
-          <button class="btn-msg">Send Message</button>
+          <button class="btn-msg" onclick="openMessage('${p.id}')">Send Message</button>
         </div>
       </div>
     </div>
@@ -817,6 +878,213 @@ function submitModal() {
   document.getElementById('mok').style.display='block';
 }
 document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal();});
+
+  // ── LIVE AUTOCOMPLETE ──
+  function heroAutocomplete(val) {
+    const box = document.getElementById('hero-ac');
+    const q = val.trim().toLowerCase();
+    if (q.length < 2) { box.classList.remove('open'); return; }
+    const matches = PROVIDERS.filter(p =>
+      p.name.toLowerCase().includes(q) ||
+      p.type.toLowerCase().includes(q) ||
+      p.services.some(s => s.toLowerCase().includes(q)) ||
+      p.neighborhood.toLowerCase().includes(q) ||
+      p.specialties.some(s => s.toLowerCase().includes(q))
+    ).slice(0, 6);
+    function hl(text) {
+      const idx = text.toLowerCase().indexOf(q);
+      if (idx === -1) return text;
+      return text.slice(0,idx)+'<mark>'+text.slice(idx,idx+q.length)+'</mark>'+text.slice(idx+q.length);
+    }
+    if (!matches.length) {
+      box.innerHTML = `<div class="ac-no-results">No results for "<strong>${val}</strong>"</div>`;
+    } else {
+      box.innerHTML = matches.map(p => `
+        <div class="ac-item" onclick="selectAC('${p.id}')">
+          <div class="ac-emoji">${p.emoji}</div>
+          <div class="ac-info">
+            <div class="ac-name">${hl(p.name)}</div>
+            <div class="ac-meta">${p.type} · ${p.neighborhood} · ${p.priceLabel}</div>
+          </div>
+          <span style="color:#1a7a3c;font-size:13px;font-weight:700;margin-left:auto;">★ ${p.rating}</span>
+        </div>`).join('');
+    }
+    box.classList.add('open');
+  }
+  function selectAC(id) {
+    document.getElementById('hero-ac').classList.remove('open');
+    document.getElementById('h-svc').value = '';
+    showProfile(id);
+  }
+  document.addEventListener('click', e => {
+    const wrap = document.getElementById('hero-search-wrap');
+    if (wrap && !wrap.contains(e.target)) document.getElementById('hero-ac').classList.remove('open');
+  });
+  document.getElementById('b-svc').addEventListener('input', () => runFilter());
+  document.getElementById('b-loc').addEventListener('input', () => runFilter());
+
+  // ── LIST YOUR BUSINESS ──
+  let ltbType = '', ltbStep = 1;
+  function openLTB() {
+    ltbType=''; ltbStep=1;
+    document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
+    document.querySelectorAll('.ltb-step-content').forEach(s=>s.classList.remove('show'));
+    document.getElementById('ltb-s1').classList.add('show');
+    document.querySelectorAll('.ltb-step').forEach((s,i)=>s.classList.toggle('active',i===0));
+    document.getElementById('ltb-content').style.display='block';
+    document.getElementById('ltb-success').style.display='none';
+    document.getElementById('ltb-modal').classList.add('open');
+  }
+  function closeLTB() { document.getElementById('ltb-modal').classList.remove('open'); }
+  function selectType(el, type) {
+    document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('selected'));
+    el.classList.add('selected'); ltbType=type;
+  }
+  function ltbNext(step) {
+    if(step===2&&!ltbType){alert('Please select a provider type.');return;}
+    if(step===3&&!document.getElementById('ltb-bizname').value.trim()){alert('Please enter your business name.');return;}
+    ltbStep=step;
+    document.querySelectorAll('.ltb-step-content').forEach(s=>s.classList.remove('show'));
+    document.getElementById('ltb-s'+step).classList.add('show');
+    document.querySelectorAll('.ltb-step').forEach((s,i)=>s.classList.toggle('active',i<step));
+  }
+  function ltbSubmit() {
+    if(!document.getElementById('ltb-email').value.includes('@')){alert('Please enter a valid email.');return;}
+    document.getElementById('ltb-content').style.display='none';
+    document.getElementById('ltb-success').style.display='block';
+  }
+  document.getElementById('ltb-modal').addEventListener('click',e=>{if(e.target===document.getElementById('ltb-modal'))closeLTB();});
+
+  // ── SIGN IN ──
+  function openSignIn() {
+    document.getElementById('signin-content').style.display='block';
+    document.getElementById('si-ok').style.display='none';
+    document.getElementById('signin-modal').classList.add('open');
+  }
+  function closeSignIn() { document.getElementById('signin-modal').classList.remove('open'); }
+  function submitSignIn() {
+    document.getElementById('signin-content').style.display='none';
+    document.getElementById('si-ok').style.display='block';
+  }
+  document.getElementById('signin-modal').addEventListener('click',e=>{if(e.target===document.getElementById('signin-modal'))closeSignIn();});
+
+  // ── SEND MESSAGE ──
+  let msgProvId = null;
+  function openMessage(id) {
+    msgProvId=id;
+    const p=PROVIDERS.find(x=>x.id===id);
+    document.getElementById('msg-prov-name').textContent='to '+p.name;
+    document.getElementById('msg-content').style.display='block';
+    document.getElementById('msg-ok').style.display='none';
+    document.getElementById('msg-modal').classList.add('open');
+  }
+  function closeMessage() { document.getElementById('msg-modal').classList.remove('open'); }
+  function submitMessage() {
+    const p=PROVIDERS.find(x=>x.id===msgProvId);
+    document.getElementById('msg-content').style.display='none';
+    document.getElementById('msg-ok-name').textContent=p.name;
+    document.getElementById('msg-ok').style.display='block';
+  }
+  document.getElementById('msg-modal').addEventListener('click',e=>{if(e.target===document.getElementById('msg-modal'))closeMessage();});
 </script>
+<!-- LIST YOUR BUSINESS MODAL -->
+<div class="overlay" id="ltb-modal">
+  <div class="modal" style="max-width:500px;">
+    <button class="modal-x" onclick="closeLTB()">×</button>
+    <div id="ltb-content">
+      <div class="ltb-steps">
+        <div class="ltb-step active" id="lstep-0"></div>
+        <div class="ltb-step" id="lstep-1"></div>
+        <div class="ltb-step" id="lstep-2"></div>
+      </div>
+      <!-- STEP 1 -->
+      <div class="ltb-step-content show" id="ltb-s1">
+        <div class="ltb-label">Step 1 of 3</div>
+        <div class="ltb-title">What kind of provider are you?</div>
+        <div class="ltb-sub">Choose what best describes your business.</div>
+        <div class="type-grid">
+          <div class="type-opt" onclick="selectType(this,'Mobile Groomer')"><div class="type-opt-emoji">🚐</div><div class="type-opt-label">Mobile Groomer</div></div>
+          <div class="type-opt" onclick="selectType(this,'Grooming Salon')"><div class="type-opt-emoji">✂️</div><div class="type-opt-label">Grooming Salon</div></div>
+          <div class="type-opt" onclick="selectType(this,'Dog Trainer')"><div class="type-opt-emoji">🎓</div><div class="type-opt-label">Dog Trainer</div></div>
+          <div class="type-opt" onclick="selectType(this,'Pet Sitter')"><div class="type-opt-emoji">🏡</div><div class="type-opt-label">Pet Sitter</div></div>
+          <div class="type-opt" onclick="selectType(this,'Boarding')"><div class="type-opt-emoji">🐾</div><div class="type-opt-label">Boarding</div></div>
+          <div class="type-opt" onclick="selectType(this,'Other')"><div class="type-opt-emoji">➕</div><div class="type-opt-label">Other</div></div>
+        </div>
+        <button class="ltb-btn" onclick="ltbNext(2)">Continue →</button>
+      </div>
+      <!-- STEP 2 -->
+      <div class="ltb-step-content" id="ltb-s2">
+        <div class="ltb-label">Step 2 of 3</div>
+        <div class="ltb-title">Tell us about your business</div>
+        <div class="ltb-sub">We'll use this to set up your profile.</div>
+        <div class="mf"><label>Business name</label><input type="text" id="ltb-bizname" placeholder="e.g. Luna Mobile Grooming"/></div>
+        <div class="mf"><label>Your name</label><input type="text" id="ltb-name" placeholder="First & last name"/></div>
+        <div class="mf"><label>Neighborhood / service area</label><input type="text" id="ltb-area" placeholder="e.g. Studio City, Sherman Oaks"/></div>
+        <button class="ltb-btn" onclick="ltbNext(3)">Continue →</button>
+        <button class="ltb-btn ltb-btn-outline" onclick="ltbNext(1)">← Back</button>
+      </div>
+      <!-- STEP 3 -->
+      <div class="ltb-step-content" id="ltb-s3">
+        <div class="ltb-label">Step 3 of 3</div>
+        <div class="ltb-title">How should we reach you?</div>
+        <div class="ltb-sub">We'll schedule a quick call to get your profile live — usually within 48 hours.</div>
+        <div class="mf"><label>Email address</label><input type="email" id="ltb-email" placeholder="you@email.com"/></div>
+        <div class="mf"><label>Phone number</label><input type="tel" id="ltb-phone" placeholder="(818) 555-0100"/></div>
+        <div class="mf"><label>Anything else? (optional)</label><input type="text" id="ltb-note" placeholder="Best time to call, questions, etc."/></div>
+        <button class="ltb-btn" onclick="ltbSubmit()">Submit — Get Listed Free →</button>
+        <button class="ltb-btn ltb-btn-outline" onclick="ltbNext(2)">← Back</button>
+      </div>
+    </div>
+    <!-- SUCCESS -->
+    <div class="ltb-success" id="ltb-success" style="display:none;">
+      <div class="ltb-success-emoji">🎉</div>
+      <h3>You're on the list!</h3>
+      <p>We'll call you within 48 hours to get your profile live on Pawrber. In the meantime, feel free to browse how your listing will look.</p>
+      <button class="ltb-btn" style="margin-top:16px;" onclick="closeLTB()">Got it</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIGN IN MODAL -->
+<div class="overlay" id="signin-modal">
+  <div class="modal" style="max-width:400px;">
+    <button class="modal-x" onclick="closeSignIn()">×</button>
+    <div id="signin-content">
+      <h2>Welcome back</h2>
+      <p class="modal-sub">Sign in to manage your bookings and pet profiles.</p>
+      <div class="mf"><label>Email address</label><input type="email" id="si-email" placeholder="you@email.com"/></div>
+      <div class="mf"><label>Password</label><input type="password" id="si-pass" placeholder="••••••••"/></div>
+      <button class="modal-submit" onclick="submitSignIn()">Sign In</button>
+      <p style="text-align:center;margin-top:14px;font-size:13px;color:#888;">Don't have an account? <a href="#" onclick="closeSignIn();openLTB();return false;" style="color:#1a7a3c;font-weight:700;">List your business</a> or <a href="#" style="color:#1a7a3c;font-weight:700;">sign up as an owner</a></p>
+    </div>
+    <div class="modal-ok" id="si-ok">
+      <div class="modal-ok-emoji">👋</div>
+      <h3>Coming soon!</h3>
+      <p>Full accounts are launching soon. Join the waitlist and we'll notify you the moment it's live.</p>
+      <button class="modal-submit" onclick="closeSignIn()">Got it</button>
+    </div>
+  </div>
+</div>
+
+<!-- SEND MESSAGE MODAL -->
+<div class="overlay" id="msg-modal">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-x" onclick="closeMessage()">×</button>
+    <div id="msg-content">
+      <h2>Send a message</h2>
+      <p class="modal-sub" id="msg-prov-name"></p>
+      <div class="mf"><label>Your name</label><input type="text" placeholder="Full name"/></div>
+      <div class="mf"><label>Your email</label><input type="email" placeholder="you@email.com"/></div>
+      <div class="mf"><label>Message</label><textarea style="width:100%;border:2px solid #ddd;border-radius:10px;padding:11px 13px;font-family:'Inter',sans-serif;font-size:14px;color:#111;background:#f0f7ff;outline:none;resize:vertical;min-height:100px;transition:border-color .2s;" placeholder="Hi! I'd like to book a grooming appointment for my golden doodle…" onfocus="this.style.borderColor='#1a7a3c'" onblur="this.style.borderColor='#ddd'"></textarea></div>
+      <button class="modal-submit" onclick="submitMessage()">Send Message</button>
+    </div>
+    <div class="modal-ok" id="msg-ok">
+      <div class="modal-ok-emoji">📨</div>
+      <h3>Message sent!</h3>
+      <p>We've forwarded your message to <span id="msg-ok-name"></span>. Expect a reply within 24 hours.</p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
