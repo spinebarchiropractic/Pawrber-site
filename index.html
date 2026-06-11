@@ -479,9 +479,23 @@
   <div class="hero">
     <div class="hero-inner">
     <div class="hero-left">
-      <!-- Decorative bg circles -->
+      <!-- Decorative bg elements -->
       <div style="position:absolute;top:-60px;right:-80px;width:400px;height:400px;border-radius:50%;background:rgba(124,107,232,0.08);pointer-events:none;"></div>
       <div style="position:absolute;bottom:-40px;left:-60px;width:280px;height:280px;border-radius:50%;background:rgba(0,137,123,0.07);pointer-events:none;"></div>
+      <!-- Floating paw prints - subtle background texture -->
+      <div style="position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:0.07;">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <!-- Scattered paw prints across hero -->
+          <g fill="#00897b">
+            <!-- Paw 1 -->
+            <ellipse cx="80%" cy="15%" rx="10" ry="13" transform="rotate(-20,80%,15%)"/>
+            <circle cx="calc(80% - 18px)" cy="calc(15% - 16px)" r="6"/>
+            <circle cx="calc(80% + 18px)" cy="calc(15% - 16px)" r="6"/>
+            <circle cx="calc(80% - 26px)" cy="calc(15% - 4px)" r="5"/>
+            <circle cx="calc(80% + 26px)" cy="calc(15% - 4px)" r="5"/>
+          </g>
+        </svg>
+      </div>
       <div class="hero-tag"><div class="hero-dot"></div>Now live in Los Angeles</div>
       <h1 class="hero-h1">Your pet deserves<br>the <em>best hands</em><br>in LA.</h1>
       <p style="font-family:'Nunito',sans-serif;font-size:16px;font-weight:700;color:#00897b;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;margin-top:8px;">Find. Connect. Care.</p>
@@ -517,6 +531,36 @@
 
     <!-- FLOATING PROVIDER CARDS -->
     <div class="hero-cards">
+      <!-- Pet profile preview card -->
+      <div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 32px rgba(0,0,0,0.10);border:1.5px solid rgba(255,255,255,0.9);margin-bottom:4px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#00897b;margin-bottom:10px;">🐾 Pet Profile</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+          <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#e0f7f4,#ede9ff);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;">🐶</div>
+          <div>
+            <div style="font-size:16px;font-weight:700;color:#0d1f3c;">Biscuit</div>
+            <div style="font-size:12px;color:#888;">Golden Doodle · 3 yrs · Studio City</div>
+          </div>
+          <div style="margin-left:auto;background:#e0f7f4;color:#00897b;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;">Active</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div style="background:#f8faff;border-radius:10px;padding:10px 12px;">
+            <div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Coat</div>
+            <div style="font-size:13px;font-weight:600;color:#0d1f3c;">Curly / thick</div>
+          </div>
+          <div style="background:#f8faff;border-radius:10px;padding:10px 12px;">
+            <div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Preferred cut</div>
+            <div style="font-size:13px;font-weight:600;color:#0d1f3c;">Teddy bear</div>
+          </div>
+          <div style="background:#f8faff;border-radius:10px;padding:10px 12px;">
+            <div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Last groomed</div>
+            <div style="font-size:13px;font-weight:600;color:#0d1f3c;">May 28</div>
+          </div>
+          <div style="background:#f8faff;border-radius:10px;padding:10px 12px;">
+            <div style="font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px;">Vaccines</div>
+            <div style="font-size:13px;font-weight:600;color:#00897b;">✓ Current</div>
+          </div>
+        </div>
+      </div>
       <div class="hcard">
         <div class="hcard-emoji">🐾</div>
         <div>
