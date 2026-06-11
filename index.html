@@ -40,13 +40,14 @@
 
     /* ── HERO ── */
     .hero {
-      background: #111;
+      background: linear-gradient(135deg, #004d40 0%, #00897b 40%, #26a69a 70%, #00acc1 100%);
       padding: 64px 28px 72px;
     }
     .hero-inner { max-width: 1200px; margin: 0 auto; }
     .hero-tag {
       display: inline-flex; align-items: center; gap: 8px;
-      background: #00897b; color: #fff;
+      background: rgba(255,255,255,0.15); color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
       font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
       padding: 6px 14px; border-radius: 99px; margin-bottom: 24px;
     }
@@ -61,7 +62,7 @@
       margin-bottom: 20px;
     }
     .hero-h1 em { font-style: italic; color: #fbbf24; }
-    .hero-sub { font-size: 18px; color: #999; line-height: 1.7; margin-bottom: 40px; max-width: 540px; }
+    .hero-sub { font-size: 18px; color: rgba(255,255,255,0.82); line-height: 1.7; margin-bottom: 40px; max-width: 540px; }
 
     /* Search */
     .search-wrap {
@@ -70,7 +71,9 @@
       padding: 8px;
       display: flex; gap: 0;
       max-width: 580px;
-      border: 2px solid #333;
+      border: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      position: relative;
     }
     .sf { flex: 1; padding: 10px 16px; border-right: 2px solid #eee; }
     .sf:last-of-type { border-right: none; }
@@ -148,7 +151,7 @@
 
     .hero-pills { display: flex; align-items: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
     .hero-pills-lbl { font-size: 13px; color: #666; }
-    .pill { font-size: 13px; font-weight: 500; background: #222; color: #ccc; padding: 6px 14px; border-radius: 99px; text-decoration: none; cursor: pointer; border: none; transition: all .15s; }
+    .pill { font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.15); color: #fff; padding: 6px 14px; border-radius: 99px; text-decoration: none; cursor: pointer; border: 1px solid rgba(255,255,255,0.25); transition: all .15s; }
     .pill:hover { background: #fff; color: #111; }
 
     /* ── GREEN TRUST BAR ── */
@@ -236,12 +239,12 @@
     .prov-cta-btn:hover { background: #b45309; }
 
     /* ── BROWSE PAGE SPECIFIC ── */
-    .browse-bar { background: #111; padding: 32px 28px; border-bottom: 2px solid #222; }
-    .browse-bar h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 20px; letter-spacing: -0.5px; }
+    .browse-bar { background: linear-gradient(135deg, #004d40 0%, #00897b 100%); padding: 32px 28px; border-bottom: none; }
+    .browse-bar h1 { font-size: 28px; font-weight: 700; color: #fff; margin-bottom: 20px; letter-spacing: -0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.2); }
     .bs-row { display: flex; gap: 10px; flex-wrap: wrap; }
-    .bs-inp { flex: 1; min-width: 160px; background: #1a1a1a; border: 2px solid #333; border-radius: 10px; padding: 11px 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: #fff; outline: none; transition: border-color .2s; }
-    .bs-inp::placeholder { color: #555; }
-    .bs-inp:focus { border-color: #00897b; }
+    .bs-inp { flex: 1; min-width: 160px; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.25); border-radius: 10px; padding: 11px 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: #fff; outline: none; transition: border-color .2s; }
+    .bs-inp::placeholder { color: rgba(255,255,255,0.55); }
+    .bs-inp:focus { border-color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.2); }
     .bs-btn { background: #00897b; color: #fff; border: none; cursor: pointer; border-radius: 10px; padding: 11px 28px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; transition: background .2s; }
     .bs-btn:hover { background: #00695c; }
     .browse-layout { max-width: 1200px; margin: 0 auto; padding: 28px 28px 80px; display: grid; grid-template-columns: 240px 1fr; gap: 28px; align-items: start; }
@@ -272,7 +275,7 @@
     .no-res p { font-size: 15px; color: #888; }
 
     /* ── PROVIDER PROFILE SPECIFIC ── */
-    .prof-banner { height: 220px; background: #111; position: relative; overflow: hidden; border-bottom: 4px solid #00897b; }
+    .prof-banner { height: 220px; background: linear-gradient(135deg, #004d40 0%, #00897b 50%, #00acc1 100%); position: relative; overflow: hidden; border-bottom: 4px solid #00695c; }
     .prof-banner-dots { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 26px 26px; }
     .prof-banner-emoji { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); font-size: 120px; opacity: .1; user-select: none; }
     .back-link { position: absolute; top: 20px; left: 28px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.5); text-decoration: none; }
@@ -416,13 +419,19 @@
   <div class="nav-inner">
     <a href="#" class="nav-logo" onclick="showPage('home')">
       <div class="nav-logo-box">
-        <svg width="22" height="24" viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M8 4h14c7 0 12 4.5 12 10.5S29 25 22 25H14v15H8V4z" fill="white"/>
-          <circle cx="20" cy="13" r="3.2" fill="#00897b"/>
-          <circle cx="14.5" cy="9.5" r="2" fill="#00897b"/>
-          <circle cx="25.5" cy="9.5" r="2" fill="#00897b"/>
-          <circle cx="12" cy="15.5" r="1.8" fill="#00897b"/>
-          <circle cx="28" cy="15.5" r="1.8" fill="#00897b"/>
+        <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Main paw pad -->
+          <ellipse cx="50" cy="62" rx="22" ry="18" fill="white"/>
+          <!-- Top center toe -->
+          <ellipse cx="50" cy="30" rx="10" ry="13" fill="white"/>
+          <!-- Left toe -->
+          <ellipse cx="28" cy="38" rx="9" ry="12" fill="white" transform="rotate(-15 28 38)"/>
+          <!-- Right toe -->
+          <ellipse cx="72" cy="38" rx="9" ry="12" fill="white" transform="rotate(15 72 38)"/>
+          <!-- Far left toe -->
+          <ellipse cx="14" cy="55" rx="7" ry="10" fill="white" transform="rotate(-25 14 55)"/>
+          <!-- Far right toe -->
+          <ellipse cx="86" cy="55" rx="7" ry="10" fill="white" transform="rotate(25 86 55)"/>
         </svg>
       </div>
       <span class="nav-logo-text">Pawrber</span>
