@@ -207,7 +207,7 @@
       transition: border-color .2s, transform .2s, box-shadow .2s;
     }
     .card:hover { border-color: #111; transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,.12); }
-    .card-img { width: 100%; aspect-ratio: 4/3; background: #e8f0fe; border-bottom: 2px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 52px; }
+    .card-img { width: 100%; height: 180px; background: #e8f0fe; border-bottom: 2px solid #ddd; overflow: hidden; }
     .card-body { padding: 16px 18px 20px; }
     .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
     .card-name { font-size: 16px; font-weight: 700; color: #111; line-height: 1.2; }
@@ -299,7 +299,7 @@
     .no-res p { font-size: 15px; color: #888; }
 
     /* ── PROVIDER PROFILE SPECIFIC ── */
-    .prof-banner { height: 220px; background: linear-gradient(135deg, #d0f5ee 0%, #e8f8f5 40%, #ede9ff 100%); position: relative; overflow: hidden; border-bottom: 2px solid #e0eeed; }
+    .prof-banner { height: 220px; position: relative; overflow: hidden; border-bottom: 2px solid #e0eeed; }
     .prof-banner-dots { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 26px 26px; }
     .prof-banner-emoji { position: absolute; right: 8%; top: 50%; transform: translateY(-50%); font-size: 120px; opacity: .1; user-select: none; }
     .back-link { position: absolute; top: 20px; left: 28px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,.5); text-decoration: none; }
@@ -774,9 +774,24 @@ function stars(r) {
   return `<span class="stars-sm">${'★'.repeat(Math.round(r))}</span>`;
 }
 
+const PROVIDER_PHOTOS = {
+  'luna-mobile':  'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400&h=300&fit=crop&q=80',
+  'well-groomed': 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?w=400&h=300&fit=crop&q=80',
+  'paws-motion':  'https://images.unsplash.com/photo-1601758124510-52d02ddb7cbd?w=400&h=300&fit=crop&q=80',
+  'golden-shears':'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=300&fit=crop&q=80',
+  'fig-fern':     'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=400&h=300&fit=crop&q=80',
+  'east-k9':      'https://images.unsplash.com/photo-1546527868-ccb7ee7dfa6a?w=400&h=300&fit=crop&q=80',
+  'venice-wag':   'https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=400&h=300&fit=crop&q=80',
+  'bark-avenue':  'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=300&fit=crop&q=80',
+};
+
 function renderCard(p) {
+  const photo = PROVIDER_PHOTOS[p.id];
   return `<a href="#" class="card" onclick="showProfile('${p.id}');return false;">
-    <div class="card-img">${p.emoji}</div>
+    <div class="card-img" style="position:relative;overflow:hidden;">
+      ${photo ? `<img src="${photo}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentNode.innerHTML='<div style=\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;background:#f0f7ff;\'>${p.emoji}</div>'">`
+               : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:52px;">${p.emoji}</div>`}
+    </div>
     <div class="card-body">
       <div class="card-top">
         <div><div class="card-name">${p.name}</div><div class="card-type">${p.type} · ${p.neighborhood}</div></div>
@@ -884,8 +899,11 @@ function showProfile(id) {
     }).join('');
   }
 
+  // Set banner photo
+  const bannerPhoto = PROVIDER_PHOTOS[p.id];
+
   document.getElementById('pg-profile').innerHTML = `
-    <div class="prof-banner">
+    <div class="prof-banner" id="prof-banner-el">
       <div class="prof-banner-dots"></div>
       <div class="prof-banner-emoji">${p.emoji}</div>
       <a href="#" class="back-link" onclick="showPage('browse');return false;">← Back to results</a>
@@ -958,6 +976,15 @@ function showProfile(id) {
     </div>
   `;
   showPage('profile');
+  // Apply banner photo after render
+  if (bannerPhoto) {
+    const banner = document.getElementById('prof-banner-el');
+    if (banner) {
+      banner.style.backgroundImage = `url(${bannerPhoto})`;
+      banner.style.backgroundSize = 'cover';
+      banner.style.backgroundPosition = 'center';
+    }
+  }
 }
 
 // ── MODAL ──
